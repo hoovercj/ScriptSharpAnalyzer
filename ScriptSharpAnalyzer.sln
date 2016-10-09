@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptSharpAnalyzer", "ScriptSharpAnalyzer\ScriptSharpAnalyzer\ScriptSharpAnalyzer.csproj", "{874E7D61-3677-4121-864A-699EB5389926}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptSharpAnalyzer.Test", "ScriptSharpAnalyzer\ScriptSharpAnalyzer.Test\ScriptSharpAnalyzer.Test.csproj", "{CA865974-E6AE-4564-8497-D5FFFB1BD6A2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptSharpAnalyzer.Vsix", "ScriptSharpAnalyzer\ScriptSharpAnalyzer.Vsix\ScriptSharpAnalyzer.Vsix.csproj", "{B7B20AE3-EB2E-4193-A68F-48B4630CED98}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{874E7D61-3677-4121-864A-699EB5389926}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{874E7D61-3677-4121-864A-699EB5389926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{874E7D61-3677-4121-864A-699EB5389926}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA865974-E6AE-4564-8497-D5FFFB1BD6A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA865974-E6AE-4564-8497-D5FFFB1BD6A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA865974-E6AE-4564-8497-D5FFFB1BD6A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA865974-E6AE-4564-8497-D5FFFB1BD6A2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B7B20AE3-EB2E-4193-A68F-48B4630CED98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B7B20AE3-EB2E-4193-A68F-48B4630CED98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7B20AE3-EB2E-4193-A68F-48B4630CED98}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -13,20 +13,28 @@ namespace ScriptSharp
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class ScriptSharpAnalyzer : DiagnosticAnalyzer
     {
-        public const string DiagnosticId = "ScriptSharp";
-
         // You can change these strings in the Resources.resx file. If you do not want your analyzer to be localize-able, you can use regular strings for Title and MessageFormat.
         // See https://github.com/dotnet/roslyn/blob/master/docs/analyzers/Localizing%20Analyzers.md for more on localization
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
-            id: "ScriptSharp1337",
-            title: "ScriptSharp",
-            messageFormat:"ScriptSharp doesn't allow {0}",
-            category: "ScriptSharp",
-            defaultSeverity: DiagnosticSeverity.Error, 
-            isEnabledByDefault: true);
+        public const string AutoPropDiagnosticId = "ScriptSharp1338";
+        public const string LambdaDiagnosticId = "ScriptSharp1339";
+        public const string InterfaceInheritanceDiagnosticId = "ScriptSharp1340";
+        public const string ObjectInitializerDiagnosticId = "ScriptSharp1341";
+        public const string QueryExpressionDiagnosticId = "ScriptSharp1342";
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get { return ImmutableArray.Create(Rule); } }
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics
+        {
+            get
+            {
+                return ImmutableArray.Create(
+                    CreateRule(AutoPropDiagnosticId),
+                    CreateRule(LambdaDiagnosticId),
+                    CreateRule(InterfaceInheritanceDiagnosticId),
+                    CreateRule(ObjectInitializerDiagnosticId),
+                    CreateRule(QueryExpressionDiagnosticId)
+                );
+            }
+        }
 
         public override void Initialize(AnalysisContext context)
         {
@@ -42,7 +50,6 @@ namespace ScriptSharp
         {
             var node = context.Node;
             var root = node.SyntaxTree.GetRoot();
-
             // check if System.Runtime.CompilerServices have been imported as an indicator of ScriptSharp files
             // This would not be necessary if the analyzer was included in the ScriptSharp projets directly
             // but it allows the analyzer to be added to visual studio locally without affecting project files
@@ -55,6 +62,7 @@ namespace ScriptSharp
             }
 
             string message = default(string);
+            string id = default(string);
             switch (node.RawKind)
             {
                 // Disallow auto properties
@@ -63,12 +71,14 @@ namespace ScriptSharp
                     var hasBlock = node.ChildNodes().Any(syntaxNode => syntaxNode.IsKind(SyntaxKind.Block));
                     if (!hasBlock)
                     {
+                        id = AutoPropDiagnosticId;
                         message = "Auto-properties/properties without a block.";
                     }
                     break;
                 // Disallow lamdba expressions
                 case (int)SyntaxKind.ParenthesizedLambdaExpression:
                 case (int)SyntaxKind.SimpleLambdaExpression:
+                    id = LambdaDiagnosticId;
                     message = "Lambda expressions. Use a delegate instead.";
                     break;
                 // Disallow interfaces inheriting from other interfaces
@@ -76,27 +86,41 @@ namespace ScriptSharp
                     var inherits = node.ChildNodes().Any(syntaxNode => syntaxNode.IsKind(SyntaxKind.BaseList));
                     if (inherits)
                     {
+                        id = InterfaceInheritanceDiagnosticId;
                         message = "Interfaces that inherit from other interfaces.";
                     }
                     break;
                 // Disallow object and collection initializers
                 case (int)SyntaxKind.ObjectInitializerExpression:
                 case (int)SyntaxKind.CollectionInitializerExpression:
+                    id = ObjectInitializerDiagnosticId;
                     message = "Object and Collection initializers.";
                     break;
                 // Disallow query expressions (such as LINQ)
                 case (int)SyntaxKind.QueryExpression:
+                    id = QueryExpressionDiagnosticId;
                     message = "Query expressions (such as LINQ)";
                     break;
                 default:
                     break;
             }
 
-            if (!String.IsNullOrEmpty(message))
+            if (!String.IsNullOrEmpty(message) && !String.IsNullOrEmpty(id))
             {
-                var diagnostic = Diagnostic.Create(Rule, node.GetLocation(), message);
+                var diagnostic = Diagnostic.Create(CreateRule(id), node.GetLocation(), message);
                 context.ReportDiagnostic(diagnostic);
             }
+        }
+
+        private static DiagnosticDescriptor CreateRule(string id)
+        {
+            return new DiagnosticDescriptor(
+                    id: id,
+                    title: "ScriptSharp",
+                    messageFormat: "ScriptSharp doesn't allow {0}",
+                    category: "ScriptSharp",
+                    defaultSeverity: DiagnosticSeverity.Error,
+                    isEnabledByDefault: true);
         }
     }
 }
